@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option java_package = "org.springblade.uav.proto";
+option java_outer_classname = "PlanLine";
+
+message PlanLineData{
+    uint32 finishedAction=1;//结束航线后动作：1返航，2原地悬停，3原地降落
+    float maxSpeed=2;//最大飞行速度
+    float  autoSpeed=3;//自动飞行速度
+    repeated PointData points=4;//坐标点数组
+}
+
+message PointData{
+    double lng=1;//经度
+    double lat=2;//纬度
+    uint32 height=3;//高度
+}

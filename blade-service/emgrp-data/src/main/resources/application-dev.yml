@@ -1,0 +1,43 @@
+#服务器端口
+server:
+  port: 8107
+
+#数据源配置
+spring:
+  datasource:
+    url: ${blade.datasource.dev.url}
+    username: ${blade.datasource.dev.username}
+    password: ${blade.datasource.dev.password}
+  servlet:
+    multipart:
+      max-file-size: 2048MB
+      max-request-size: 2048MB
+      enabled: true
+      file-size-threshold: 0
+
+hbase:
+  conf:
+    confMaps:
+      'hbase.zookeeper.quorum' : '127.0.0.1:2181'
+
+oss:
+  enable: true
+  name: minio
+  tenant-mode: false
+  endpoint: http://127.0.0.1:9000
+  access-key: minioadmin
+  secret-key: minioadmin
+  network: http://211.149.129.108:41000
+
+file:
+  upload:
+    temp-path: /blade/upload/tmp
+
+http:
+  url:
+    ai: http://127.0.0.1/
+    modelling: http://127.0.0.1
+
+ffmpeg:
+    install:
+        path: /emgrp/ffmpeg/ffmpeg

@@ -1,0 +1,10 @@
+#服务器端口
+server:
+  port: 8222
+
+#数据源配置
+spring:
+  datasource:
+    url: ${task.datasource.prod.url}
+    username: ${task.datasource.prod.username}
+    password: ${task.datasource.prod.password}

@@ -1,0 +1,107 @@
+#spring配置
+spring:
+    redis:
+        ##redis 单机环境配置
+        ##将docker脚本部署的redis服务映射为宿主机ip
+        host: blade-redis
+        port: 6379
+        password: gAFo53x79peYonRz
+        database: 0
+        ssl: false
+        ##redis 集群环境配置
+        #cluster:
+        #  nodes: 127.0.0.1:7001,127.0.0.1:7002,127.0.0.1:7003
+        #  commandTimeout: 5000
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        #driver-class-name: org.postgresql.Driver
+        #driver-class-name: oracle.jdbc.OracleDriver
+        druid:
+            # MySql、PostgreSQL校验
+            validation-query: select 1
+            # Oracle校验
+            #validation-query: select 1 from dual
+    servlet:
+        multipart:
+            max-file-size: 2048MB
+            max-request-size: 2048MB
+            enabled: true
+            file-size-threshold: 0
+
+#项目模块集中配置
+blade:
+    #分布式锁配置
+    lock:
+        ##是否启用分布式锁
+        enabled: false
+        ##将docker脚本部署的redis服务映射为宿主机ip
+        address: redis://blade-redis:6379
+    #通用开发生产环境数据库地址(特殊情况可在对应的子工程里配置覆盖)
+    datasource:
+        test:
+            url: jdbc:mysql://172.30.0.38:3306/bladex?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&tinyInt1isBit=false&allowMultiQueries=true&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+            username: root
+            password: 1qaz2wsx3edc
+    document:
+        resources:
+            - name: 授权模块
+              location: /blade-auth
+            - name: 工作台模块
+              location: /blade-desk
+            - name: 系统模块
+              location: /blade-system
+            - name: 救援任务模块
+              location: /emgrp-task
+            - name: 无人机模块
+              location: /emgrp-uav
+            - name: 数据模块
+              location: /emgrp-data
+            - name: 疑似人员失联模块
+              location: /emgrp-person
+task:
+    datasource:
+        test:
+            url: jdbc:mysql://172.30.0.38:3306/emgrp-task?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&tinyInt1isBit=false&allowMultiQueries=true&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+            username: root
+            password: 1qaz2wsx3edc
+uav:
+    datasource:
+        test:
+            url: jdbc:mysql://172.30.0.38:3306/emgrp-uav?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&tinyInt1isBit=false&allowMultiQueries=true&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+            username: root
+            password: 1qaz2wsx3edc
+person:
+    datasource:
+        test:
+            url: jdbc:mysql://172.30.0.38:3306/emgrp-person?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&tinyInt1isBit=false&allowMultiQueries=true&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+            username: root
+            password: 1qaz2wsx3edc
+
+hbase:
+    conf:
+        confMaps:
+            'hbase.zookeeper.quorum' : '172.30.0.20:2181'
+
+oss:
+    enable: true
+    name: minio
+    tenant-mode: false
+    endpoint: http://172.30.0.28:9000
+    access-key: admin
+    secret-key: oEzfFZglATFEauhD
+    network: http://172.30.0.28:9000
+
+file:
+    upload:
+        temp-path: /blade/upload/tmp
+
+http:
+    url:
+        ai: http://127.0.0.1
+        modelling: http://127.0.0.1
+ffmpeg:
+    install:
+        path: /emgrp/ffmpeg/ffmpeg
+
+model3d:
+    downLocalPath: /docker/nginx/web/source/model

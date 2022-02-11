@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.task.mapper.Emerg3dOperTaskMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="emerg3dOperTaskResultMap" type="org.springblade.task.entity.Emerg3dOperTask">
+        <id column="id" property="id"/>
+        <result column="taskId" property="taskId"/>
+        <result column="eventId" property="eventId"/>
+        <result column="type" property="type"/>
+        <result column="startTime" property="startTime"/>
+        <result column="endTime" property="endTime"/>
+        <result column="memo" property="memo"/>
+        <result column="status" property="status"/>
+        <result column="progress" property="progress"/>
+        <result column="createTime" property="createTime"/>
+        <result column="createUser" property="createUser"/>
+        <result column="updateTime" property="updateTime"/>
+        <result column="updateUser" property="updateUser"/>
+    </resultMap>
+
+
+    <select id="selectEmerg3dOperTaskPage" resultMap="emerg3dOperTaskResultMap">
+        select * from emerg_3d_oper_task where is_deleted = 0
+    </select>
+
+    <!--置空结束时间-->
+    <update id="updateEndTimeById" parameterType="string">
+        update emerg_3d_oper_task set endTime = NULL where  taskId = #{taskId}
+    </update>
+
+    <!--模型导出-->
+    <select id="listModelByDate" resultType="java.util.LinkedHashMap">
+        SELECT
+        m1.id modelTaskId,
+        task.id taskId,
+        task.faceImgPath imgUrl,
+        m1.type modelType,
+        task.`name` taskName,
+        m1.bucketName,
+        m1.objName modelUrl from
+        ( SELECT * from emerg_3d_oper_task
+            where type = 2
+            AND objName is not null
+            AND objName != ''
+            AND createTime &gt;= #{beginTime}
+            AND createTime &lt;= #{endTime} ) m1
+        left join emerg_work_task task on task.id = m1.taskId
+    </select>
+
+    <!--3d模型导出 - 根据id导出-->
+    <select id="exportModel" resultType="java.util.LinkedHashMap">
+        SELECT
+        task.`name` taskName,
+        m1.bucketName,
+        m1.objName modelUrl from
+        ( SELECT * from emerg_3d_oper_task
+            where type = 2
+            AND objName is not null
+            AND objName != '') m1
+        left join emerg_work_task task on task.id = m1.taskId
+        where task.id = #{modelId}
+    </select>
+
+</mapper>

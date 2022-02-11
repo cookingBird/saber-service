@@ -1,0 +1,65 @@
+# 日志级别 trace debug info warning error fatal panic
+LogLevel: debug
+
+# 平台token登录配置
+OAuthUrl: "http://localhost/blade-auth/oauth/token"
+ClientId: "saber"
+ClientSecret: "saber_secret"
+TenantId: "000000"
+Username: "admin"
+Password: "admin"
+
+# 查询无人机信息地址
+GetUavUrl: "http://localhost/emgrp-uav/client/getUavTask"
+
+# MinIO地址
+MinIOEndpoint: "127.0.0.1:9000"
+# MinIO access-key
+MinIOAccessKey: "minioadmin"
+# MinIO secret-key
+MinIOSecretKey: "minioadmin"
+
+#HBase地址
+HBaseUrl: "127.0.0.1:2181"
+
+#ffmpeg执行路径
+FfmpegPath: "ffmpeg"
+
+# 直播通知接口
+LiveNotifyUrl: "http://localhost/emgrp-data/ai/live"
+
+# HttpFlv端口 需要开外网，用户需要访问
+HttpFlvPort: 10001
+# Rtmp端口 需要开外网，无人机需要连接
+RtmpPort: 10002
+
+# 读超时，单位秒
+ReadTimeout: 30
+# 写超时，单位秒
+WriteTimeout: 30
+# 存活超时（超过多少时间没有数据往来，会断开连接），单位秒
+AliveTimeout: 30
+
+# 直播缓存数据包数据量，超过限制就会丢弃
+CachePacketNum: 10
+
+# 直播文件保存路径
+FileDir: "./tmp"
+
+# name为直播路径,不能更改
+Apps:
+    # 无人机直播配置
+    -   Name: uav
+        # AI子系统如果支持rtmp推送，在这配置地址
+        #PushUrls: ["rtmp://localhost:10102/live"]
+        # 是否转码直播，即是否开启720p、480p直播
+        LiveTranscoding: true
+
+    # 无人机720p直播
+    -   Name: uav720p
+
+    # 无人机480p直播
+    -   Name: uav480p
+
+    # AI直播配置
+    -   Name: ai

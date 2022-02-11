@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.task.mapper.EmergAiOperTaskMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="emergAiOperTaskResultMap" type="org.springblade.task.entity.EmergAiOperTask">
+        <id column="id" property="id"/>
+        <result column="taskId" property="taskId"/>
+        <result column="eventId" property="eventId"/>
+        <result column="startTime" property="startTime"/>
+        <result column="memo" property="memo"/>
+        <result column="status" property="status"/>
+        <result column="progress" property="progress"/>
+        <result column="createTime" property="createTime"/>
+        <result column="createUser" property="createUser"/>
+        <result column="updateTime" property="updateTime"/>
+        <result column="updateUser" property="updateUser"/>
+    </resultMap>
+
+
+    <select id="selectEmergAiOperTaskPage" resultMap="emergAiOperTaskResultMap">
+        select * from emerg_ai_oper_task where is_deleted = 0
+    </select>
+
+</mapper>

@@ -1,0 +1,40 @@
+#服务器端口
+server:
+  port: 8333
+
+#数据源配置
+spring:
+  datasource:
+    url: ${uav.datasource.dev.url}
+    username: ${uav.datasource.dev.username}
+    password: ${uav.datasource.dev.password}
+
+hbase:
+  conf:
+    confMaps:
+      'hbase.zookeeper.quorum' : '127.0.0.1:2181'
+
+uav:
+  live:
+    open: 1
+  server:
+    port: 11000
+
+
+http:
+  url:
+    #是否下发AI 0不下发；1为下发
+    type: 0
+
+yunhe:
+  accessKey:
+    accessKeyId: 4riefBsE7fp9dDtqSpKn
+    accessKeySecret: ztN8DCLnknfgkN2v23fWgc3NnvY7f8gv
+  http:
+    addr: http://eapi.wogrid.com:12000/
+  tcp:
+    ip: eapi.wogrid.com
+    port: 13001
+  rtmp:
+    ip: 211.149.129.108
+    port: 10002

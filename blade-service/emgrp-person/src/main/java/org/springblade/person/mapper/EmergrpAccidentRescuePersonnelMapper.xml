@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.person.mapper.EmergrpAccidentRescuePersonnelMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="emergrpAccidentRescuePersonnelResultMap"
+               type="org.springblade.person.entity.EmergrpAccidentRescuePersonnel">
+        <id column="id" property="id"/>
+        <result column="taskId" property="taskId"/>
+        <result column="ruleId" property="ruleId"/>
+        <result column="time" property="time"/>
+        <result column="MSISDN" property="msisdn"/>
+        <result column="IMSI" property="imsi"/>
+        <result column="LACorTAC" property="LACorTAC"/>
+        <result column="CIorECI" property="CIorECI"/>
+        <result column="longitude" property="longitude"/>
+        <result column="latitude" property="latitude"/>
+        <result column="createTime" property="createTime"/>
+    </resultMap>
+
+
+    <select id="selectEmergrpAccidentRescuePersonnelPage" resultMap="emergrpAccidentRescuePersonnelResultMap">
+        select *
+        from emergrp_accident_rescue_personnel
+        where is_deleted = 0
+    </select>
+
+    <!-- 批量添加援灾人员 -->
+    <select id="selectRescuePersonnelList" resultMap="emergrpAccidentRescuePersonnelResultMap" parameterType="long">
+        select *
+        from emergrp_accident_escape_danger p
+        where p.ruleId = #{ruleId}
+          and not EXISTS(
+            select 1 from emergrp_accident_personnel ed where ed.ruleId = #{ruleId} and ed.IMSI = p.IMSI)
+    </select>
+
+    <select id="getPersonnelAnalysis" resultType="org.springblade.person.entity.EmergrpAccidentStatPersonnel">
+        SELECT eabs.province AS province,
+               eabs.city     AS city,
+               eabs.`name`     AS town,
+               eabs.longitude,eabs.latitude,
+               count(1)      AS num
+        FROM (
+                 SELECT *
+                 FROM emergrp_accident_rescue_personnel
+                 WHERE ruleId = #{ruleId}
+             ) earp
+                 LEFT JOIN emergrp_accident_base_station eabs on eabs.ruleId=earp.ruleId
+                 where earp.LACorTAC =eabs.LACorTAC and earp.CIorECI = eabs.CIorECI
+        GROUP BY eabs.province,
+                 eabs.city,
+                 eabs.`name`,
+                 eabs.longitude,eabs.latitude
+    </select>
+
+</mapper>

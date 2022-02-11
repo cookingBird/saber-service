@@ -1,0 +1,23 @@
+#服务器端口
+server:
+  port: 8333
+
+#数据源配置
+spring:
+  datasource:
+    url: ${uav.datasource.prod.url}
+    username: ${uav.datasource.prod.username}
+    password: ${uav.datasource.prod.password}
+
+hbase:
+  conf:
+    confMaps:
+      'hbase.zookeeper.quorum' : '127.0.0.1:2181'
+
+uav:
+  server:
+    port: {uav.server.port}
+
+http:
+  url:
+    syncDevInfo: 127.0.0.1

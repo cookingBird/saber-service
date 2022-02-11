@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.uav.mapper.UavFlyingLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="uavFlyingLogResultMap" type="org.springblade.uav.entity.UavFlyingLog">
+        <id column="id" property="id"/>
+        <result column="flytaskId" property="flytaskId"/>
+        <result column="uavId" property="uavId"/>
+        <result column="flyingTime" property="flyingTime"/>
+        <result column="posX" property="posX"/>
+        <result column="posY" property="posY"/>
+        <result column="height" property="height"/>
+        <result column="memo" property="memo"/>
+        <result column="status" property="status"/>
+        <result column="createTime" property="createTime"/>
+        <result column="createUser" property="createUser"/>
+        <result column="updateTime" property="updateTime"/>
+        <result column="updateUser" property="updateUser"/>
+    </resultMap>
+
+
+    <select id="selectUavFlyingLogPage" resultMap="uavFlyingLogResultMap">
+        select * from emergrp_uav_flying_log where is_deleted = 0
+    </select>
+
+</mapper>

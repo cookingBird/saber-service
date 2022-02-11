@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.task.mapper.EmergWorkTaskMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="emergWorkTaskResultMap" type="org.springblade.task.entity.EmergWorkTask">
+        <id column="id" property="id"/>
+        <result column="eventId" property="eventId"/>
+        <result column="hisTaskId" property="hisTaskId"/>
+        <result column="name" property="name"/>
+        <result column="modeFunc" property="modeFunc"/>
+        <result column="AIAnalysis" property="AIAnalysis"/>
+        <result column="missingPerson" property="missingPerson"/>
+        <result column="liveStreaming" property="liveStreaming"/>
+        <result column="source" property="source"/>
+        <result column="UAVList" property="UAVList"/>
+        <result column="createTime" property="createTime"/>
+        <result column="createUser" property="createUser"/>
+        <result column="updateTime" property="updateTime"/>
+        <result column="updateUser" property="updateUser"/>
+    </resultMap>
+
+
+    <select id="selectEmergWorkTaskPage" resultMap="emergWorkTaskResultMap">
+        select * from emerg_work_task where is_deleted = 0
+    </select>
+
+    <!--根据无人机id查询救援任务-->
+    <select id="getTaskInfoByUav" parameterType="string" resultMap="emergWorkTaskResultMap">
+        SELECT * FROM emerg_work_task WHERE FIND_IN_SET(#{uavId},UAVList) ORDER BY createTime DESC limit 0,1
+    </select>
+
+</mapper>

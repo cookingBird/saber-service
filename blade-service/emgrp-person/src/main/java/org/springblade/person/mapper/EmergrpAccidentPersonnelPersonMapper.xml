@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.person.mapper.EmergrpAccidentPersonnelPersonMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="emergrpAccidentPersonnelPersonResultMap" type="org.springblade.person.entity.EmergrpAccidentPersonnelPerson">
+        <id column="id" property="id"/>
+        <result column="taskId" property="taskId"/>
+        <result column="ruleId" property="ruleId"/>
+        <result column="time" property="time"/>
+        <result column="MSISDN" property="msisdn"/>
+        <result column="IMSI" property="imsi"/>
+        <result column="LACorTAC" property="LACorTAC"/>
+        <result column="CIorECI" property="CIorECI"/>
+        <result column="RAT" property="rat"/>
+        <result column="longitude" property="longitude"/>
+        <result column="latitude" property="latitude"/>
+        <result column="flowType" property="flowType"/>
+        <result column="coordinateType" property="coordinateType"/>
+        <result column="createTime" property="createTime"/>
+    </resultMap>
+
+
+    <select id="selectEmergrpAccidentPersonnelPersonPage" resultMap="emergrpAccidentPersonnelPersonResultMap">
+        select * from emergrp_accident_personnel_person where is_deleted = 0
+    </select>
+
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.person.mapper.EmergAccidentRuleMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="emergAccidentRuleResultMap" type="org.springblade.person.entity.EmergAccidentRule">
+        <id column="id" property="id"/>
+        <result column="taskId" property="taskId"/>
+        <result column="time" property="time"/>
+        <result column="raduis" property="raduis"/>
+        <result column="longitude" property="longitude"/>
+        <result column="latitude" property="latitude"/>
+        <result column="createTime" property="createTime"/>
+        <result column="createUser" property="createUser"/>
+    </resultMap>
+
+
+    <select id="selectEmergAccidentRulePage" resultMap="emergAccidentRuleResultMap">
+        select * from emerg_accident_rule where is_deleted = 0
+    </select>
+
+</mapper>

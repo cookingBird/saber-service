@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.person.mapper.EmergrpAccidentSuspectedMissingMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="emergrpAccidentSuspectedMissingResultMap" type="org.springblade.person.entity.EmergrpAccidentSuspectedMissing">
+        <id column="id" property="id"/>
+        <result column="taskId" property="taskId"/>
+        <result column="ruleId" property="ruleId"/>
+        <result column="time" property="time"/>
+        <result column="MSISDN" property="msisdn"/>
+        <result column="IMSI" property="imsi"/>
+        <result column="LACorTAC" property="LACorTAC"/>
+        <result column="CIorECI" property="CIorECI"/>
+        <result column="longitude" property="longitude"/>
+        <result column="latitude" property="latitude"/>
+        <result column="status" property="status"/>
+        <result column="missingTime" property="missingTime"/>
+        <result column="createTime" property="createTime"/>
+        <result column="updateTime" property="updateTime"/>
+        <result column="updateUser" property="updateUser"/>
+    </resultMap>
+
+    <resultMap id="accidentSuspectedMissingAllResultMap" type="org.springblade.person.vo.EmergrpAccidentSuspectedMissingVO">
+        <id column="id" property="id"/>
+        <result column="taskId" property="taskId"/>
+        <result column="ruleId" property="ruleId"/>
+        <result column="time" property="time"/>
+        <result column="MSISDN" property="msisdn"/>
+        <result column="IMSI" property="imsi"/>
+        <result column="LACorTAC" property="LACorTAC"/>
+        <result column="CIorECI" property="CIorECI"/>
+        <result column="longitude" property="longitude"/>
+        <result column="latitude" property="latitude"/>
+        <result column="status" property="status"/>
+        <result column="missingTime" property="missingTime"/>
+        <result column="createTime" property="createTime"/>
+        <result column="updateTime" property="updateTime"/>
+        <result column="updateUser" property="updateUser"/>
+        <!--人员信息详细表-->
+        <result column="province" property="province"/>
+        <result column="city" property="city"/>
+        <result column="age" property="age"/>
+        <result column="sex" property="sex"/>
+        <result column="IDType" property="IDType"/>
+        <result column="IDNumber" property="IDNumber"/>
+        <result column="mobile" property="mobile"/>
+    </resultMap>
+
+    <select id="selectEmergrpAccidentSuspectedMissingPage" resultMap="accidentSuspectedMissingAllResultMap">
+        select a.*,
+               b.province,
+               b.city,
+               b.age,
+               b.sex,
+               b.IDType,
+               b.IDNumber,
+               b.MSISDN as mobile
+        from emergrp_accident_suspected_missing AS a
+                 LEFT JOIN emergrp_person_info AS b
+                           ON a.IMSI = b.IMSI
+        WHERE a.ruleId = #{ruleId}
+    </select>
+
+
+    <!-- 批量添加疑似失联人员 -->
+    <insert id="batchInsertMissing" parameterType="long">
+        insert into emergrp_accident_suspected_missing(taskId,ruleId,`time`,MSISDN,IMSI,LACorTAC,CIorECI,longitude,latitude,createTime)
+            select taskId,ruleId,`time`,MSISDN,IMSI,LACorTAC,CIorECI,longitude,latitude,createTime
+                 from emergrp_accident_personnel p where p.ruleId=#{ruleId} and not EXISTS(
+					select 1 from emergrp_accident_escape_danger ed where ed.ruleId=#{ruleId} and ed.IMSI=p.IMSI )
+    </insert>
+
+    <select id="getHeatMapPointList" resultType="org.springblade.person.vo.SuspectedMissingVO">
+        select longitude AS longitude, latitude AS latitude, COUNT(1) AS peopleNum
+        from emergrp_accident_suspected_missing
+        where ruleId = #{ruleId}
+        GROUP BY longitude, latitude
+    </select>
+
+    <select id="getTotleMissing" resultType="org.springblade.person.entity.AccidentMissTotle">
+        select COUNT(1)         AS counts,
+               SUM(epi.sex = 1)   AS manNum,
+               SUM(epi.sex = 2)   AS womanNum,
+               SUM(epi.age >= 60) AS oldMan
+        from emergrp_accident_suspected_missing AS easm
+                 LEFT JOIN emergrp_person_info AS epi
+                           ON easm.IMSI = epi.IMSI
+        WHERE easm.ruleId = #{ruleId}
+    </select>
+
+
+
+</mapper>

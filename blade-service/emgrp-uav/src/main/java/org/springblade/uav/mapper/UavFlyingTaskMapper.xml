@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.uav.mapper.UavFlyingTaskMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="uavFlyingTaskResultMap" type="org.springblade.uav.entity.UavFlyingTask">
+        <id column="id" property="id"/>
+        <result column="uavId" property="uavId"/>
+        <result column="worktaskid" property="worktaskid"/>
+        <result column="startPos" property="startPos"/>
+        <result column="startTime" property="startTime"/>
+        <result column="finishTime" property="finishTime"/>
+        <result column="flyDistance" property="flyDistance"/>
+        <result column="flyTime" property="flyTime"/>
+        <result column="flySpeed" property="flySpeed"/>
+        <result column="flyHeight" property="flyHeight"/>
+        <result column="operator" property="operator"/>
+        <result column="memo" property="memo"/>
+        <result column="status" property="status"/>
+        <result column="createTime" property="createTime"/>
+        <result column="createUser" property="createUser"/>
+        <result column="updateTime" property="updateTime"/>
+        <result column="updateUser" property="updateUser"/>
+    </resultMap>
+
+
+    <select id="selectUavFlyingTaskPage" resultMap="uavFlyingTaskResultMap">
+        select * from emergrp_uav_flying_task where is_deleted = 0
+    </select>
+
+</mapper>

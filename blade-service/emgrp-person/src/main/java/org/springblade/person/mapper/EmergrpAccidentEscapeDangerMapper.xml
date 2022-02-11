@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.person.mapper.EmergrpAccidentEscapeDangerMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="emergrpAccidentEscapeDangerResultMap"
+               type="org.springblade.person.entity.EmergrpAccidentEscapeDanger">
+        <id column="id" property="id"/>
+        <result column="taskId" property="taskId"/>
+        <result column="ruleId" property="ruleId"/>
+        <result column="time" property="time"/>
+        <result column="MSISDN" property="msisdn"/>
+        <result column="IMSI" property="imsi"/>
+        <result column="LACorTAC" property="LACorTAC"/>
+        <result column="CIorECI" property="CIorECI"/>
+        <result column="longitude" property="longitude"/>
+        <result column="latitude" property="latitude"/>
+        <result column="createTime" property="createTime"/>
+    </resultMap>
+
+
+    <select id="selectEmergrpAccidentEscapeDangerPage" resultMap="emergrpAccidentEscapeDangerResultMap">
+        select *
+        from emergrp_accident_escape_danger
+        where is_deleted = 0
+    </select>
+
+    <select id="getPersonnelAnalysis" resultType="org.springblade.person.entity.EmergrpAccidentStatPersonnel">
+        SELECT eabs.province AS province,
+               eabs.city     AS city,
+               eabs.`name`   AS town,
+               eabs.longitude,
+               eabs.latitude,
+               count(1)      AS num
+        FROM (
+                 SELECT *
+                 FROM emergrp_accident_escape_danger
+                 WHERE ruleId = #{ruleId}
+             ) eaed
+                 LEFT JOIN emergrp_accident_base_station eabs
+                           ON eaed.ruleId = eabs.ruleId
+        where eaed.CIorECI = eabs.CIorECI and eaed.LACorTAC = eabs.LACorTAC
+        GROUP BY eabs.province,
+                 eabs.city,
+                 eabs.`name`,
+                 eabs.longitude,
+                 eabs.latitude
+    </select>
+
+    <!-- 获取脱险人员中西藏和新疆人口去向 -->
+    <select id="getEscapeDangerDirection" resultType="org.springblade.person.entity.EmergrpAccidentStatPersonnel">
+         SELECT
+                eaed.provinceCode,
+				eabs.`name`   AS town,
+				count(1)      AS num
+		FROM (
+				select ed.*,pi.provinceCode,pi.province from (SELECT *
+						 FROM emergrp_accident_escape_danger
+						 WHERE ruleId = #{ruleId}) ed left join emergrp_person_info pi
+						        on ed.imsi=pi.imsi where pi.provinceCode in(#{xzCode},#{xjCode})
+				 ) eaed
+						 LEFT JOIN emergrp_accident_base_station eabs
+											 ON eaed.ruleId = eabs.ruleId
+		where eaed.CIorECI = eabs.CIorECI and eaed.LACorTAC = eabs.LACorTAC
+		GROUP BY eaed.provinceCode,eabs.`name`,eabs.longitude,eabs.latitude
+    </select>
+
+
+    <select id="getNumTibetOrXj" resultType="java.util.HashMap">
+        select epi.province, count(1)
+        from (select * from emergrp_accident_escape_danger where ruleId = #{ruleId}) eaed
+                 left join emergrp_person_info epi on eaed.IMSI = epi.IMSI
+        group by epi.province
+    </select>
+
+    <select id="getTibetXJAnalysis" resultType="org.springblade.person.entity.EmergrpAccidentStatPersonnel">
+        SELECT eabs.province AS province,
+               eabs.city     AS city,
+               eabs.name     AS town,
+               count(1)      AS num
+        FROM (
+                 SELECT a.LACorTAC, a.CIorECI
+                 FROM emergrp_accident_escape_danger a
+                          LEFT JOIN emergrp_person_info b on b.province = #{proCode}
+                 WHERE a.ruleId = #{ruleId}
+                   and a.imsi = b.imsi
+             ) eaed
+                 LEFT JOIN emergrp_accident_base_station eabs
+                           ON eaed.LACorTAC + eaed.CIorECI = eabs.LACorTAC + eabs.CIorECI
+        GROUP BY eabs.province,
+                 eabs.city,
+                 eabs.name
+
+    </select>
+
+    <delete id="deleteRescueFromEscape">
+        delete ed from emergrp_accident_escape_danger ed WHERE ed.ruleId=#{ruleId} and EXISTS (
+            select 1 from  emergrp_accident_rescue_personnel ep where ep.ruleId=#{ruleId} and ed.imsi = ep.imsi)
+    </delete>
+
+</mapper>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.task.mapper.EmgrgAiTaskResultObjMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="emgrgAiTaskResultObjResultMap" type="org.springblade.task.entity.EmgrgAiTaskResultObj">
+        <id column="id" property="id"/>
+        <result column="taskId" property="taskId"/>
+        <result column="resultId" property="resultId"/>
+        <result column="objectType" property="objectType"/>
+        <result column="objectLongitude" property="objectLongitude"/>
+        <result column="objectLatitude" property="objectLatitude"/>
+        <result column="createTime" property="createTime"/>
+    </resultMap>
+
+
+    <select id="selectEmgrgAiTaskResultObjPage" resultMap="emgrgAiTaskResultObjResultMap">
+        select * from emgrg_ai_task_result_obj
+    </select>
+
+</mapper>
